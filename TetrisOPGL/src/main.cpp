@@ -66,6 +66,10 @@ void ProcessInput(GLFWwindow* window, Game& game) {
         game.keys[GLFW_KEY_W] = true;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
         game.keys[GLFW_KEY_S] = true;
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS)
+        game.keys[GLFW_KEY_E] = true;
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS)
+        game.keys[GLFW_KEY_Q] = true;
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
           game.keys[GLFW_KEY_P] = true;
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
@@ -79,6 +83,12 @@ void ProcessInput(GLFWwindow* window, Game& game) {
         game.keys[GLFW_KEY_W] = false;
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_RELEASE)
         game.keys[GLFW_KEY_S] = false;
+    if (glfwGetKey(window, GLFW_KEY_E) == GLFW_RELEASE)
+        game.keys[GLFW_KEY_E] = false;
+    if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_RELEASE)
+        game.keys[GLFW_KEY_Q] = false;
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_RELEASE)
+        game.keys[GLFW_KEY_A] = false;
     if (glfwGetKey(window, GLFW_KEY_P) == GLFW_RELEASE)
         game.keys[GLFW_KEY_P] = false;
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_RELEASE)

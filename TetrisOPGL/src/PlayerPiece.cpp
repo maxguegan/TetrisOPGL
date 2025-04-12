@@ -2,6 +2,7 @@
 
 PlayerPiece::PlayerPiece(){
 	shape = SHAPE::SHAPE_LINE;
+	nextShape = static_cast<SHAPE>(rand() % 7);
 	for (int i = 0; i < PIECE_SIZE; i++)
 		curBlocks[i] = NULL;
 }
@@ -14,7 +15,8 @@ void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int & nombreBloc
 		
 	int heightLimit = tileHeight - 4;
 	int gridMiddle = tileWidth / 2;
-	shape = static_cast<SHAPE>(rand() % 7);
+	shape = nextShape;
+	nextShape = static_cast<SHAPE>(rand() % 7);
 	switch (shape)//l'élément 0 est le pivot pour la rotation 
 	{
 	case SHAPE_SQUARE:
@@ -24,8 +26,8 @@ void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int & nombreBloc
 		curBlocks[3]->Init(Ressource::GetTexture("block_carre"), tileSize, board[gridMiddle + 1][heightLimit + 1]);
 		break;
 	case SHAPE_LINE:
-		curBlocks[0]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit]);
-		curBlocks[1]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[0]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit + 2]);
 		curBlocks[3]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit + 3]);
 		break;
@@ -114,5 +116,39 @@ void PlayerPiece::AffixPiece(Tile(&board)[tileWidth][tileHeight]) {
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
 		board[blockPos.x][blockPos.y].state = FULL;
+	}
+}
+
+void PlayerPiece::RotateRight(Tile(&board)[tileWidth][tileHeight]) {
+	glm::ivec2 pivotPos = curBlocks[0]->GetPos();
+	for (int i = 1; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		int rotateY = -(blockPos.x - pivotPos.x);
+		int rotateX = blockPos.y - pivotPos.y;
+		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL)
+			return;
+	}
+	for (int i = 1; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		int rotateY = -(blockPos.x - pivotPos.x);
+		int rotateX = blockPos.y - pivotPos.y;
+		curBlocks[i]->SetPos(board[pivotPos.x + rotateX][pivotPos.y + rotateY]);
+	}
+	
+}
+void PlayerPiece::RotateLeft(Tile(&board)[tileWidth][tileHeight]) {
+	glm::ivec2 pivotPos = curBlocks[0]->GetPos();
+	for (int i = 1; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		int rotateY = blockPos.x - pivotPos.x;
+		int rotateX = -(blockPos.y - pivotPos.y);
+		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL)
+			return;
+	}
+	for (int i = 1; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		int rotateY = blockPos.x - pivotPos.x;
+		int rotateX = -(blockPos.y - pivotPos.y);
+		curBlocks[i]->SetPos(board[pivotPos.x + rotateX][pivotPos.y + rotateY]);
 	}
 }

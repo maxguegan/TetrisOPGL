@@ -81,7 +81,20 @@ void Game::ProcessInput() {
 	else if (!keys[GLFW_KEY_A] && lockKeys[GLFW_KEY_A]) {
 		lockKeys[GLFW_KEY_A] = false;
 	}
-	
+	if (keys[GLFW_KEY_E] && !lockKeys[GLFW_KEY_E]) {
+		playerPiece.RotateRight(board);
+		lockKeys[GLFW_KEY_E] = true;
+	}
+	else if (!keys[GLFW_KEY_E] && lockKeys[GLFW_KEY_E]) {
+		lockKeys[GLFW_KEY_E] = false;
+	}
+	if (keys[GLFW_KEY_Q] && !lockKeys[GLFW_KEY_Q]) {
+		playerPiece.RotateLeft(board);
+		lockKeys[GLFW_KEY_Q] = true;
+	}
+	else if (!keys[GLFW_KEY_Q] && lockKeys[GLFW_KEY_Q]) {
+		lockKeys[GLFW_KEY_Q] = false;
+	}
 }
 
 void Game::Render() {
