@@ -12,28 +12,52 @@ void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int & nombreBloc
 		j++;
 	}
 		
-	
+	int heightLimit = tileHeight - 4;
+	int gridMiddle = tileWidth / 2;
 	shape = static_cast<SHAPE>(rand() % 7);
-	shape = SHAPE::SHAPE_SQUARE;
-	switch (shape)
+	switch (shape)//l'élément 0 est le pivot pour la rotation 
 	{
 	case SHAPE_SQUARE:
-		curBlocks[0]->Init(Ressource::GetTexture("block_carre"), tileSize, board[6][22], glm::ivec2(6, 22));
-		curBlocks[1]->Init(Ressource::GetTexture("block_carre"), tileSize, board[7][22], glm::ivec2(7, 22));
-		curBlocks[2]->Init(Ressource::GetTexture("block_carre"), tileSize, board[6][23], glm::ivec2(6, 23));
-		curBlocks[3]->Init(Ressource::GetTexture("block_carre"), tileSize, board[7][23], glm::ivec2(7, 23));
+		curBlocks[0]->Init(Ressource::GetTexture("block_carre"), tileSize, board[gridMiddle][heightLimit]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_carre"), tileSize, board[gridMiddle + 1][heightLimit]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_carre"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_carre"), tileSize, board[gridMiddle + 1][heightLimit + 1]);
 		break;
 	case SHAPE_LINE:
+		curBlocks[0]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit + 2]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[gridMiddle][heightLimit + 3]);
 		break;
 	case SHAPE_T:
+		curBlocks[0]->Init(Ressource::GetTexture("block_T"), tileSize, board[gridMiddle][heightLimit]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_T"), tileSize, board[gridMiddle + 1][heightLimit]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_T"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_T"), tileSize, board[gridMiddle - 1][heightLimit]);
 		break;
 	case SHAPE_L_RIGHT:
+		curBlocks[0]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[gridMiddle][heightLimit]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[gridMiddle + 1][heightLimit]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[gridMiddle][heightLimit + 2]);
 		break;
 	case SHAPE_L_LEFT:
+		curBlocks[0]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[gridMiddle][heightLimit]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[gridMiddle - 1][heightLimit]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[gridMiddle][heightLimit + 2]);
 		break;
 	case SHAPE_Z_RIGHT:
+		curBlocks[0]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[gridMiddle][heightLimit]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[gridMiddle + 1][heightLimit + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[gridMiddle - 1][heightLimit]);
 		break;
 	case SHAPE_Z_LEFT:
+		curBlocks[0]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[gridMiddle][heightLimit]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[gridMiddle][heightLimit + 1]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[gridMiddle - 1][heightLimit + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[gridMiddle + 1][heightLimit]);
 		break;
 	default:
 		std::cout << "Erreur au niveau du choix de forme" << std::endl;
@@ -47,12 +71,48 @@ bool PlayerPiece::Down(Tile(&board)[tileWidth][tileHeight]) {
 	
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
-		if (board[blockPos.x][blockPos.y - 1].state == FULL)// On vérifie si la prochaine case est déjà remplie, si oui on arrète et 
-			return true;											//on renvoie vrai	
+		// On vérifie si la prochaine case est déjà remplie, si oui on arrète et on renvoie vrai	
+		if (board[blockPos.x][blockPos.y - 1].state == FULL) {
+			this->AffixPiece(board);
+			return true;
+		}
 	}
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
-		curBlocks[i]->SetPos(board[blockPos.x][blockPos.y - 1], glm::ivec2(blockPos.x, blockPos.y - 1));
+		curBlocks[i]->SetPos(board[blockPos.x][blockPos.y - 1]);
 	}
 	return false;
+}
+void PlayerPiece::MoveRight(Tile(&board)[tileWidth][tileHeight]) {
+	for (int i = 0; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		// On vérifie si la prochaine case est déjà remplie, si oui on arrète et on renvoie vrai	
+		if (board[blockPos.x + 1][blockPos.y].state == FULL) {
+			return;
+		}
+	}
+	for (int i = 0; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		curBlocks[i]->SetPos(board[blockPos.x + 1][blockPos.y]);
+	}
+	
+}
+void PlayerPiece::MoveLeft(Tile(&board)[tileWidth][tileHeight]) {
+	for (int i = 0; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		// On vérifie si la prochaine case est déjà remplie, si oui on arrète et on renvoie vrai	
+		if (board[blockPos.x - 1][blockPos.y].state == FULL) {
+			return;
+		}
+	}
+	for (int i = 0; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		curBlocks[i]->SetPos(board[blockPos.x - 1][blockPos.y]);
+	}
+}
+void PlayerPiece::AffixPiece(Tile(&board)[tileWidth][tileHeight]) {
+	for (int i = 0; i < PIECE_SIZE; i++) {
+		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		board[blockPos.x][blockPos.y].state = FULL;
+	}
 }

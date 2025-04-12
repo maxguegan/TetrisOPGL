@@ -5,6 +5,7 @@
 #include "Game.h"
 
 void ProcessInput(GLFWwindow* window, Game& game);
+GLFWwindow* SetupGLFW();
 const float SCREEN_WIDTH = 800;
 const float SCREEN_HEIGHT = 600;
 
@@ -14,30 +15,17 @@ float deltaTime = 0.0f;
 
 
 int main() {
-    //initialisation de GLFW
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_SAMPLES, 4);
+   
     //création de la fenètre
-    GLFWwindow* window = glfwCreateWindow(static_cast<int>(SCREEN_WIDTH), static_cast<int>(SCREEN_HEIGHT), "SnakeOPGL", NULL, NULL);
-
+    GLFWwindow* window = SetupGLFW();
+        if (window == NULL)
+        {
+            std::cout << "Failed to create GLFW window" << std::endl;
+            glfwTerminate();
+        }
     Game game(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    //initialisation de GLAD
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
+   
     game.Init();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -50,7 +38,7 @@ int main() {
         deltaTime = curFrame - lastFrame;
         lastFrame = curFrame;
         ProcessInput(window,game);
-        //game.ProcessInput();
+        game.ProcessInput();
         glClearColor(0.25f, 0.3f, 0.5f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         game.Update(deltaTime);
@@ -95,4 +83,22 @@ void ProcessInput(GLFWwindow* window, Game& game) {
         game.keys[GLFW_KEY_P] = false;
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_RELEASE)
         game.keys[GLFW_KEY_R] = false;
+}
+
+GLFWwindow* SetupGLFW() {
+    //initialisation de GLFW
+    glfwInit();
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    GLFWwindow* window = glfwCreateWindow(static_cast<int>(SCREEN_WIDTH), static_cast<int>(SCREEN_HEIGHT), "SnakeOPGL", NULL, NULL);
+    
+    glfwMakeContextCurrent(window);
+    //initialisation de GLAD
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+    }
+    return window;
 }

@@ -36,6 +36,8 @@ private:
 	Block blocks[tileWidth * tileHeight];
 	Tile board[tileWidth][tileHeight];
 	GAMESTATE state;
+
+	SpriteRenderer spriteRenderer;
 	
 private:
 	void InitMap();

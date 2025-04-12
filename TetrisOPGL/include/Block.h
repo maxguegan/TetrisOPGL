@@ -24,8 +24,8 @@ public:
 	
 public:
 	Block();
-	void Init(Texture & tex, const float size, Tile & tile, glm::ivec2 posGrille);
-	void SetPos(Tile & tile, glm::ivec2 posGrille);
+	void Init(Texture & tex, const float size, Tile & tile);
+	void SetPos(Tile & tile);
 	glm::ivec2 GetPos();
 	void Render(SpriteRenderer & renderer);
 
