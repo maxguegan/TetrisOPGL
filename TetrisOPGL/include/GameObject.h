@@ -18,6 +18,7 @@ public:
 
 	Texture * sprite;
 
+public:
 
 	GameObject(glm::vec2 pos = glm::vec2(0.0f), glm::vec2 size = glm::vec2(0.0f), glm::vec4 color = glm::vec4(1.0f), float rotation = 0.0f);
 	void SetTexture(Texture* tex);

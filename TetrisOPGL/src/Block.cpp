@@ -1,19 +1,21 @@
 #include "Block.h"
 
-Block::Block():posGrilleX(0), posGrilleY(0){}
+Block::Block():posGrille(glm::ivec2(0)){}
 
-void Block::Init(Texture& tex, const float size,Tile & tile) {
+void Block::Init(Texture& tex, const float size,Tile & tile, glm::ivec2 posGrille) {
 	visual.sprite = &tex;
 	visual.size = glm::vec2(size);
 	visual.position = tile.position;
-	tile.state = FULL;
+	this->posGrille = posGrille;
 }
 
-void Block::SetPos(Tile& tile) {
+void Block::SetPos(Tile& tile, glm::ivec2 posGrille) {
 	visual.position = tile.position;
-	tile.state = FULL;
+	this->posGrille = posGrille;
 }
-
+glm::ivec2 Block::GetPos() {
+	return posGrille;
+}
 void Block::Render(SpriteRenderer& renderer) {
 	visual.draw(renderer);
 }

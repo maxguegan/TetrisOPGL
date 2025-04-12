@@ -41,6 +41,7 @@ int main() {
     game.Init();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glfwSwapInterval(1);
     while (!glfwWindowShouldClose(window)) 
 
     {
@@ -52,7 +53,7 @@ int main() {
         //game.ProcessInput();
         glClearColor(0.25f, 0.3f, 0.5f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-        //game.Update(deltaTime);
+        game.Update(deltaTime);
         if (game.IsOver())
             glfwSetWindowShouldClose(window,true);
         game.Render();

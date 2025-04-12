@@ -1227,6 +1227,12 @@
     <ClInclude Include="include\Block.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\PlayerPiece.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Settings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\glm\detail\func_common.inl">
@@ -1688,9 +1694,18 @@
     <ClCompile Include="src\Tile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\PlayerPiece.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture\block_limite.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="texture\block_carre.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="texture\block_L_droite.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

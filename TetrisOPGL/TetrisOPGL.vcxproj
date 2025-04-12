@@ -533,7 +533,9 @@
     <ClInclude Include="include\glm\vec4.hpp" />
     <ClInclude Include="include\glm\vector_relational.hpp" />
     <ClInclude Include="include\KHR\khrplatform.h" />
+    <ClInclude Include="include\PlayerPiece.h" />
     <ClInclude Include="include\Ressource.h" />
+    <ClInclude Include="include\Settings.h" />
     <ClInclude Include="include\Shader.h" />
     <ClInclude Include="include\SpriteRenderer.h" />
     <ClInclude Include="include\stb_image.h" />
@@ -693,6 +695,7 @@
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\glad.c" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\PlayerPiece.cpp" />
     <ClCompile Include="src\Ressource.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\SpriteRenderer.cpp" />
@@ -701,7 +704,9 @@
     <ClCompile Include="src\Tile.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="texture\block_carre.png" />
     <Image Include="texture\block_limite.png" />
+    <Image Include="texture\block_L_droite.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

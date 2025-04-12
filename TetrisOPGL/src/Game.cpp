@@ -2,7 +2,7 @@
 
 SpriteRenderer * spriteRenderer;
 
-Game::Game(const float width, const float height): SCREEN_WIDTH(width), SCREEN_HEIGHT(height), score(0), nombreBlock(0), state(PLAYING) {
+Game::Game(const float width, const float height): SCREEN_WIDTH(width), SCREEN_HEIGHT(height), score(0), nombreBlock(0), nombreBlockBordure(0), state(PLAYING) {
 	for (int i = 0; i < 1024; i++) {
 		keys[i] = false;
 		lockKeys[i] = false;
@@ -15,6 +15,7 @@ void Game::Init() {
 	glm::mat4 projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, -1.0f, 1.0f);
 	Ressource::GetShader("sprite_shader").setMat4("projection", projection);
 	InitMap();
+	playerPiece.Spawn(blocks, nombreBlock, board);
 }
 
 void Game::InitMap() {
@@ -25,23 +26,32 @@ void Game::InitMap() {
 		for (int j = 0; j < tileWidth; j++) {
 			board[j][i].position = glm::vec2(offsetX + j * tileSize, i * tileSize);
 			if ((i == 0 || j == 0 || j == tileWidth - 1) && i <= 21) {
-				blocks[nombreBlock].Init(Ressource::GetTexture("block_limite"), tileSize, board[j][i]);
+				blocks[nombreBlock].Init(Ressource::GetTexture("block_limite"), tileSize, board[j][i],glm::ivec2(j,i));
+				board[j][i].state = FULL;
 				nombreBlock++;
 			}
 				
 		}
 		
 	}
-	
+	nombreBlockBordure = nombreBlock;
 }
 
 void Game::InitRessource() {
 	Ressource::LoadShader(std::filesystem::path{ "../shader/SpriteShader.vs" }.string().c_str(), NULL, std::filesystem::path{"../shader/SpriteShader.fs"}.string().c_str(), "sprite_shader");
 	Ressource::LoadTexture(std::filesystem::path{ "../texture/block_limite.png" }.string().c_str(), false, "block_limite");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/block_carre.png" }.string().c_str(), false, "block_carre");
 
 
 }
-
+void Game::Update(float deltaTime) {
+	timer -= deltaTime;
+	if (timer < 0.0f) {
+		if (playerPiece.Down(board))
+			playerPiece.Spawn(blocks, nombreBlock, board);
+		timer = maxTimer;
+	}
+}
 
 void Game::Render() {
 	
