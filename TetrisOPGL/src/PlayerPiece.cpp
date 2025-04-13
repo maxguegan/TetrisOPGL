@@ -6,11 +6,16 @@ PlayerPiece::PlayerPiece(){
 	for (int i = 0; i < PIECE_SIZE; i++)
 		curBlocks[i] = NULL;
 }
-void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int & nombreBlock,Tile(&board)[tileWidth][tileHeight]) {
+void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int nombreBlockLimite,Tile(&board)[tileWidth][tileHeight]) {
 	int j = 0;
-	for (int i = nombreBlock; i < PIECE_SIZE + nombreBlock; i++) {
-		curBlocks[j] = &blocks[i]; //Récupère les 4 prochains blocks dans la liste pour la pièce 
-		j++;
+	for (int i = nombreBlockLimite; i < tileHeight * tileWidth; i++) {
+		if (!blocks[i].used) {
+			curBlocks[j] = &blocks[i]; //Récupère les 4 prochains blocks dans la liste pour la pièce 
+			j++;
+			if (j == 4)
+				break;
+		}
+			
 	}
 		
 	int heightLimit = tileHeight - 4;
@@ -65,7 +70,6 @@ void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int & nombreBloc
 		std::cout << "Erreur au niveau du choix de forme" << std::endl;
 		break;
 	}
-	nombreBlock += 4;
 }
 
 //Renvoie vrai si on tente de descendre alors que l'un des blocks est en contact avec un block déjà placé et faux sinon
@@ -81,6 +85,7 @@ bool PlayerPiece::Down(Tile(&board)[tileWidth][tileHeight]) {
 	}
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		board[blockPos.x][blockPos.y].block = NULL;
 		curBlocks[i]->SetPos(board[blockPos.x][blockPos.y - 1]);
 	}
 	return false;
@@ -95,6 +100,7 @@ void PlayerPiece::MoveRight(Tile(&board)[tileWidth][tileHeight]) {
 	}
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		board[blockPos.x][blockPos.y].block = NULL;
 		curBlocks[i]->SetPos(board[blockPos.x + 1][blockPos.y]);
 	}
 	
@@ -109,12 +115,14 @@ void PlayerPiece::MoveLeft(Tile(&board)[tileWidth][tileHeight]) {
 	}
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		board[blockPos.x][blockPos.y].block = NULL;
 		curBlocks[i]->SetPos(board[blockPos.x - 1][blockPos.y]);
 	}
 }
 void PlayerPiece::AffixPiece(Tile(&board)[tileWidth][tileHeight]) {
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		curBlocks[i]->SetPos(board[blockPos.x][blockPos.y]);
 		board[blockPos.x][blockPos.y].state = FULL;
 	}
 }
@@ -130,8 +138,10 @@ void PlayerPiece::RotateRight(Tile(&board)[tileWidth][tileHeight]) {
 	}
 	for (int i = 1; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		board[blockPos.x][blockPos.y].block = NULL;
 		int rotateY = -(blockPos.x - pivotPos.x);
 		int rotateX = blockPos.y - pivotPos.y;
+
 		curBlocks[i]->SetPos(board[pivotPos.x + rotateX][pivotPos.y + rotateY]);
 	}
 	
@@ -140,6 +150,7 @@ void PlayerPiece::RotateLeft(Tile(&board)[tileWidth][tileHeight]) {
 	glm::ivec2 pivotPos = curBlocks[0]->GetPos();
 	for (int i = 1; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		board[blockPos.x][blockPos.y].block = NULL;
 		int rotateY = blockPos.x - pivotPos.x;
 		int rotateX = -(blockPos.y - pivotPos.y);
 		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL)

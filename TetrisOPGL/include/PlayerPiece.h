@@ -14,7 +14,7 @@ public:
 	SHAPE shape, nextShape;
 public:
 	PlayerPiece();
-	void Spawn(Block(&blocks)[tileWidth * tileHeight], int & nombreBlock, Tile(&board)[tileWidth][tileHeight]);
+	void Spawn(Block(&blocks)[tileWidth * tileHeight], int nombreBlockLimite, Tile(&board)[tileWidth][tileHeight]);
 	bool Down(Tile(&board)[tileWidth][tileHeight]);
 	void MoveRight(Tile(&board)[tileWidth][tileHeight]);
 	void MoveLeft(Tile(&board)[tileWidth][tileHeight]);

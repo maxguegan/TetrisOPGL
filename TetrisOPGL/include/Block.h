@@ -21,15 +21,15 @@ enum SHAPE
 class Block {
 public:
 	GameObject visual;
-	
+	bool used = false;
 public:
 	Block();
 	void Init(Texture & tex, const float size, Tile & tile);
 	void SetPos(Tile & tile);
-	glm::ivec2 GetPos();
+	const glm::ivec2 GetPos();
 	void Render(SpriteRenderer & renderer);
 
 	
 private:
-	glm::ivec2 posGrille;
+	 glm::ivec2 posGrille;
 };

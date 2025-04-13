@@ -25,13 +25,13 @@ public:
 	void Init();
 	void Render();
 	void Update(float deltaTime);
-	void ProcessInput();
+	void ProcessInput(float deltaTime);
 	bool IsOver();
 private:
 
-	int score, nombreBlock, nombreBlockBordure;
+	int score, nombreBlockBordure;
 	float timer = maxTimer;
-
+    float inputTimer = maxInputTimer;
 	PlayerPiece playerPiece;
 	Block blocks[tileWidth * tileHeight];
 	Tile board[tileWidth][tileHeight];
@@ -42,6 +42,9 @@ private:
 private:
 	void InitMap();
 	void InitRessource();
+	void CheckRows();
+	void ClearRow(int row);
+	void CheckGameOver();
 	void Restart();
 
 };
