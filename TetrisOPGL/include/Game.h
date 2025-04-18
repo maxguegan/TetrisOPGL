@@ -29,22 +29,27 @@ public:
 	bool IsOver();
 private:
 
+
 	int score, nombreBlockBordure;
 	float timer = maxTimer;
     float inputTimer = maxInputTimer;
 	PlayerPiece playerPiece;
-	Block blocks[tileWidth * tileHeight];
+	Block * blocks = new Block[tileWidth * tileHeight];
 	Tile board[tileWidth][tileHeight];
 	GAMESTATE state;
 
+	GameObject nextPieceVisual;
+
 	SpriteRenderer spriteRenderer;
-	
+	SHAPE nextShape;
 private:
 	void InitMap();
 	void InitRessource();
 	void CheckRows();
 	void ClearRow(int row);
 	void CheckGameOver();
+	void NewPiece();
+	void SetNewPieceVisual();
 	void Restart();
 
 };

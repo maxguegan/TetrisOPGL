@@ -7,6 +7,7 @@ Game::Game(const float width, const float height): SCREEN_WIDTH(width), SCREEN_H
 		keys[i] = false;
 		lockKeys[i] = false;
 	}
+	nextShape = (SHAPE)(rand() % 7);
 }
 
 void Game::Init() {
@@ -15,7 +16,11 @@ void Game::Init() {
 	glm::mat4 projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, -1.0f, 1.0f);
 	Ressource::GetShader("sprite_shader").setMat4("projection", projection);
 	InitMap();
-	playerPiece.Spawn(blocks, nombreBlockBordure, board);
+	nextPieceVisual.size = glm::vec2(100.0f);
+	nextPieceVisual.position = glm::vec2(SCREEN_WIDTH * 0.75f, SCREEN_HEIGHT * 0.5 - nextPieceVisual.size.x);
+	playerPiece.Spawn(blocks, nombreBlockBordure, board, nextShape);
+	nextShape = (SHAPE)(rand() % 7);
+	SetNewPieceVisual();
 }
 
 void Game::InitMap() {
@@ -47,18 +52,20 @@ void Game::InitRessource() {
 	Ressource::LoadTexture(std::filesystem::path{ "../texture/block_L_gauche.png" }.string().c_str(), false, "block_L_gauche");
 	Ressource::LoadTexture(std::filesystem::path{ "../texture/block_Z_droite.png" }.string().c_str(), false, "block_Z_droite");
 	Ressource::LoadTexture(std::filesystem::path{ "../texture/block_Z_gauche.png" }.string().c_str(), false, "block_Z_gauche");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_carre.png" }.string().c_str(), false, "forme_carre");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_ligne.png" }.string().c_str(), false, "forme_ligne");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_T.png" }.string().c_str(), false, "forme_T");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_L_droite.png" }.string().c_str(), false, "forme_L_droite");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_L_gauche.png" }.string().c_str(), false, "forme_L_gauche");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_Z_droite.png" }.string().c_str(), false, "forme_Z_droite");
+	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_Z_gauche.png" }.string().c_str(), false, "forme_Z_gauche");
 
 }
 void Game::Update(float deltaTime) {
 	timer -= deltaTime;
 	if (timer < 0.0f && !keys[GLFW_KEY_S]) {
-		if (playerPiece.Down(board)) {
-			CheckIntegrity(board);
-			CheckRows();
-			CheckGameOver();
-			playerPiece.Spawn(blocks, nombreBlockBordure, board);
-			
-		}
+		if (playerPiece.Down(board))
+			NewPiece();
 			
 		timer = maxTimer;
 	}
@@ -84,7 +91,6 @@ void Game::CheckRows() {
 	
 }
 void Game::ClearRow(int row) {
-	std::cout << row << std::endl;
 	for (int i = 1; i < tileWidth - 1; i++) {
 		board[i][row].GetBlock()->used = false;
 		board[i][row].state = EMPTY;
@@ -117,12 +123,8 @@ void Game::ProcessInput(float deltaTime) {
 		inputTimer -= deltaTime;
 		if (inputTimer <= 0.0f) {
 			inputTimer = maxInputTimer;
-			if (playerPiece.Down(board)) {
-				CheckIntegrity(board);
-				CheckRows();
-				CheckGameOver();
-				playerPiece.Spawn(blocks, nombreBlockBordure, board);
-			}
+			if (playerPiece.Down(board)) 
+				NewPiece();
 		}
 
 	}
@@ -161,8 +163,46 @@ void Game::Render() {
 	for(int i = 0; i < tileHeight * tileWidth; i++)
 		if(blocks[i].used)
 			blocks[i].Render(spriteRenderer);
+	nextPieceVisual.draw(spriteRenderer);
+}
+void Game::SetNewPieceVisual() {
+	switch (nextShape)
+	{
+	case SHAPE_SQUARE:
+		nextPieceVisual.sprite = Ressource::GetTexture("forme_carre");
+		break;
+	case SHAPE_LINE:
+		nextPieceVisual.sprite = Ressource::GetTexture("forme_ligne");
+		break;
+	case SHAPE_T:
+		nextPieceVisual.sprite = Ressource::GetTexture("forme_T");
+		break;
+	case SHAPE_L_RIGHT:
+		nextPieceVisual.sprite = Ressource::GetTexture("forme_L_droite");
+		break;
+	case SHAPE_L_LEFT:
+		nextPieceVisual.sprite = Ressource::GetTexture("forme_L_gauche");
+		break;
+	case SHAPE_Z_RIGHT:
+		nextPieceVisual.sprite = Ressource::GetTexture("forme_Z_droite");
+		break;
+	case SHAPE_Z_LEFT:
+		nextPieceVisual.sprite = Ressource::GetTexture("forme_Z_gauche");
+		break;
+	default:
+		break;
+	}
 }
 
+
+void Game::NewPiece(){
+	CheckIntegrity(board);
+	CheckRows();
+	CheckGameOver();
+	playerPiece.Spawn(blocks, nombreBlockBordure, board,nextShape);
+	nextShape = nextShape = (SHAPE)(rand() % 7);
+	SetNewPieceVisual();
+}
 
 bool Game::IsOver() {
 	return state == OVER;

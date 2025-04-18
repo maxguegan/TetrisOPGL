@@ -9,7 +9,7 @@ void Texture::generate(const char* path, bool format) {
 	if (format)
 		this->format_tex = GL_RGBA;
 
-	stbi_set_flip_vertically_on_load(false);
+	stbi_set_flip_vertically_on_load(true);
 	glBindTexture(GL_TEXTURE_2D, idTex);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);

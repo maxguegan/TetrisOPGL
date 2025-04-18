@@ -39,7 +39,7 @@ int main() {
         lastFrame = curFrame;
         ProcessInput(window,game);
         game.ProcessInput(deltaTime);
-        glClearColor(0.25f, 0.3f, 0.5f,1.0f);
+        glClearColor(0.1f, 0.1f, 0.1f,1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         game.Update(deltaTime);
         if (game.IsOver())

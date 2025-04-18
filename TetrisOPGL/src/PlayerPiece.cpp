@@ -1,12 +1,11 @@
 ﻿#include "PlayerPiece.h"
 
 PlayerPiece::PlayerPiece(){
-	shape = SHAPE::SHAPE_LINE;
-	nextShape = static_cast<SHAPE>(rand() % 7);
+	
 	for (int i = 0; i < PIECE_SIZE; i++)
 		curBlocks[i] = NULL;
 }
-void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int nombreBlockLimite,Tile(&board)[tileWidth][tileHeight]) {
+void PlayerPiece::Spawn(Block* blocks, int nombreBlockLimite,Tile(&board)[tileWidth][tileHeight], SHAPE shape) {
 	int j = 0;
 	for (int i = nombreBlockLimite; i < tileHeight * tileWidth; i++) {
 		if (!blocks[i].used) {
@@ -20,8 +19,7 @@ void PlayerPiece::Spawn(Block(&blocks)[tileWidth * tileHeight], int nombreBlockL
 		
 	int heightLimit = tileHeight - 4;
 	int gridMiddle = tileWidth / 2;
-	shape = nextShape;
-	nextShape = static_cast<SHAPE>(rand() % 7);
+
 	switch (shape)//l'élément 0 est le pivot pour la rotation 
 	{
 	case SHAPE_SQUARE:

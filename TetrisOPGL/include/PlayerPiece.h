@@ -11,10 +11,9 @@ class PlayerPiece {
 
 public:
 	Block* curBlocks[PIECE_SIZE];
-	SHAPE shape, nextShape;
 public:
 	PlayerPiece();
-	void Spawn(Block(&blocks)[tileWidth * tileHeight], int nombreBlockLimite, Tile(&board)[tileWidth][tileHeight]);
+	void Spawn(Block* blocks, int nombreBlockLimite, Tile(&board)[tileWidth][tileHeight], SHAPE shape);
 	bool Down(Tile(&board)[tileWidth][tileHeight]);
 	void MoveRight(Tile(&board)[tileWidth][tileHeight]);
 	void MoveLeft(Tile(&board)[tileWidth][tileHeight]);
