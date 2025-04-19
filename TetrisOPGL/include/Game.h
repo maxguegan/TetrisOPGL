@@ -5,11 +5,14 @@
 #include "Block.h"
 #include "Settings.h"
 #include "PlayerPiece.h"
+#include "TextRenderer.h"
+#include "UIText.h"
 
 enum GAMESTATE
 {
 	PLAYING,
-	OVER
+	GAMEOVER,
+	END
 };
 
 class Game {
@@ -30,18 +33,23 @@ public:
 private:
 
 
-	int score, nombreBlockBordure;
+	int score, niveau, nombreBlockBordure;
 	float timer = maxTimer;
     float inputTimer = maxInputTimer;
+
+
 	PlayerPiece playerPiece;
 	Block * blocks = new Block[tileWidth * tileHeight];
 	Tile board[tileWidth][tileHeight];
-	GAMESTATE state;
+	GAMESTATE gameState;
+	SHAPE nextShape;
 
 	GameObject nextPieceVisual;
+	UIText nextPieceText, scoreText, gameOverText;
 
-	SpriteRenderer spriteRenderer;
-	SHAPE nextShape;
+	std::unique_ptr<SpriteRenderer> spriteRenderer;
+	std::unique_ptr<TextRenderer> textRenderer;
+
 private:
 	void InitMap();
 	void InitRessource();
@@ -50,6 +58,7 @@ private:
 	void CheckGameOver();
 	void NewPiece();
 	void SetNewPieceVisual();
+	void UpdateScore(int rowNumber);
 	void Restart();
 
 };

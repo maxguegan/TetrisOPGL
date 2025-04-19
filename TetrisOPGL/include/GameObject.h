@@ -21,7 +21,7 @@ public:
 public:
 
 	GameObject(Texture tex = Texture(), glm::vec2 pos = glm::vec2(0.0f), glm::vec2 size = glm::vec2(0.0f), glm::vec4 color = glm::vec4(1.0f), float rotation = 0.0f);
-	virtual void draw(SpriteRenderer & renderer);
+	virtual void Draw(SpriteRenderer & renderer);
 
 	~GameObject();
 

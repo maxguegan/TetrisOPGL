@@ -1,9 +1,7 @@
 #include "SpriteRenderer.h"
 
-SpriteRenderer::SpriteRenderer() : width(0.0f), height(0.0f), rotate(0.0f), color(glm::vec4(1.0f)) {
+SpriteRenderer::SpriteRenderer(Shader & shader) : width(0.0f), height(0.0f), rotate(0.0f), color(glm::vec4(1.0f)) {
 	this->setupQuad();
-}
-void SpriteRenderer::Init(Shader& shader) {
 	this->shader = shader;
 }
 

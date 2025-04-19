@@ -22,5 +22,5 @@ const glm::ivec2 Block::GetPos() {
 	return posGrille;
 }
 void Block::Render(SpriteRenderer& renderer) {
-	visual.draw(renderer);
+	visual.Draw(renderer);
 }

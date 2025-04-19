@@ -542,6 +542,7 @@
     <ClInclude Include="include\TextRenderer.h" />
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="include\Tile.h" />
+    <ClInclude Include="include\UIText.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\glm\detail\func_common.inl" />
@@ -702,11 +703,28 @@
     <ClCompile Include="src\TextRenderer.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\Tile.cpp" />
+    <ClCompile Include="src\UIText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="texture\block_carre.png" />
+    <Image Include="texture\block_ligne.png" />
     <Image Include="texture\block_limite.png" />
     <Image Include="texture\block_L_droite.png" />
+    <Image Include="texture\block_L_gauche.png" />
+    <Image Include="texture\block_T.png" />
+    <Image Include="texture\block_Z_droite.png" />
+    <Image Include="texture\block_Z_gauche.png" />
+    <Image Include="texture\forme_carre.png" />
+    <Image Include="texture\forme_ligne.png" />
+    <Image Include="texture\forme_L_droite.png" />
+    <Image Include="texture\forme_L_gauche.png" />
+    <Image Include="texture\forme_T.png" />
+    <Image Include="texture\forme_Z_droite.png" />
+    <Image Include="texture\forme_Z_gauche.png" />
+    <Image Include="texture\test.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="fonts\arial.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

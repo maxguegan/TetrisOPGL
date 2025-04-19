@@ -17,7 +17,7 @@ void PlayerPiece::Spawn(Block* blocks, int nombreBlockLimite,Tile(&board)[tileWi
 			
 	}
 		
-	int heightLimit = tileHeight - 4;
+	int heightLimit = tileHeight - 5;
 	int gridMiddle = tileWidth / 2;
 
 	switch (shape)//l'élément 0 est le pivot pour la rotation 
@@ -76,7 +76,7 @@ bool PlayerPiece::Down(Tile(&board)[tileWidth][tileHeight]) {
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
 		// On vérifie si la prochaine case est déjà remplie, si oui on arrète et on renvoie vrai	
-		if (board[blockPos.x][blockPos.y - 1].state == FULL) {
+		if (board[blockPos.x][blockPos.y - 1].state == FULL || board[blockPos.x][blockPos.y - 1].state == LIMITE) {
 			this->AffixPiece(board);
 			return true;
 		}
@@ -92,7 +92,7 @@ void PlayerPiece::MoveRight(Tile(&board)[tileWidth][tileHeight]) {
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
 		// On vérifie si la prochaine case est déjà remplie, si oui on arrète et on renvoie vrai	
-		if (board[blockPos.x + 1][blockPos.y].state == FULL) {
+		if (board[blockPos.x + 1][blockPos.y].state == FULL || board[blockPos.x + 1][blockPos.y].state == LIMITE) {
 			return;
 		}
 	}
@@ -107,7 +107,7 @@ void PlayerPiece::MoveLeft(Tile(&board)[tileWidth][tileHeight]) {
 	for (int i = 0; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
 		// On vérifie si la prochaine case est déjà remplie, si oui on arrète et on renvoie vrai	
-		if (board[blockPos.x - 1][blockPos.y].state == FULL) {
+		if (board[blockPos.x - 1][blockPos.y].state == FULL || board[blockPos.x - 1][blockPos.y].state == LIMITE) {
 			return;
 		}
 	}
@@ -131,7 +131,7 @@ void PlayerPiece::RotateRight(Tile(&board)[tileWidth][tileHeight]) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
 		int rotateY = -(blockPos.x - pivotPos.x);
 		int rotateX = blockPos.y - pivotPos.y;
-		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL)
+		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL || board[blockPos.x + rotateX][blockPos.y + rotateY].state == LIMITE)
 			return;
 	}
 	for (int i = 1; i < PIECE_SIZE; i++) {
@@ -151,7 +151,7 @@ void PlayerPiece::RotateLeft(Tile(&board)[tileWidth][tileHeight]) {
 		board[blockPos.x][blockPos.y].block = NULL;
 		int rotateY = blockPos.x - pivotPos.x;
 		int rotateX = -(blockPos.y - pivotPos.y);
-		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL)
+		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL || board[blockPos.x + rotateX][blockPos.y + rotateY].state == LIMITE)
 			return;
 	}
 	for (int i = 1; i < PIECE_SIZE; i++) {

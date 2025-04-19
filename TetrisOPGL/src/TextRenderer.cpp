@@ -1,6 +1,6 @@
 #include "TextRenderer.h"
 
-TextRenderer::TextRenderer(const char* fonts) {
+TextRenderer::TextRenderer(const char* fonts, Shader& shader): shader(shader) {
     orthoProjection = glm::ortho(0.0f, 800.0f, 0.0f, 600.0f);
     FT_Library ft;
     if (FT_Init_FreeType(&ft))
@@ -76,7 +76,7 @@ TextRenderer::TextRenderer(const char* fonts) {
         glBindVertexArray(0);
     }
 
-    void TextRenderer::DrawText(std::string chaine, float x, float y, float scale, glm::vec3 color, Shader & shader) {
+    const void TextRenderer::DrawText(const std::string & chaine, float x, float y, float scale, glm::vec3 color) {
         shader.use();
         shader.setVec3("aColor", color);
         shader.setMat4("projection", orthoProjection);
@@ -114,4 +114,18 @@ TextRenderer::TextRenderer(const char* fonts) {
         }
         glBindVertexArray(0);
         glBindTexture(GL_TEXTURE_2D,0);
+    }
+
+    const glm::vec3 TextRenderer::getSize(const std::string & chaine) {
+        float tailleX = 0.0f, lowestY = 0.0f, highestY = 0.0f;
+        std::string::const_iterator c;
+        for (c = chaine.begin(); c != chaine.end(); c++) {
+            Character character = characters[*c];
+            tailleX += character.advance >> 6;
+            if (lowestY < character.size.y - character.bearing.y)
+                lowestY = character.size.y - character.bearing.y;
+            if (highestY < character.bearing.y)
+                highestY = character.bearing.y;
+        }
+        return glm::vec3(tailleX, lowestY, highestY);
     }

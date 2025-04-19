@@ -8,7 +8,8 @@ class Block;
 enum State
 {
 	EMPTY,
-	FULL
+	FULL,
+	LIMITE
 	
 };
 struct Tile
