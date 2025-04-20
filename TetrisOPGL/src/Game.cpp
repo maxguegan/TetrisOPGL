@@ -2,7 +2,7 @@
 
 void CheckIntegrity(Tile(&board)[tileWidth][tileHeight]);
 
-Game::Game(const float width, const float height): SCREEN_WIDTH(width), SCREEN_HEIGHT(height), score(0), niveau(1), nombreBlockBordure(0), gameState(PLAYING) {
+Game::Game(const float width, const float height): SCREEN_WIDTH(width), SCREEN_HEIGHT(height), score(0), level(1), nombreBlockBordure(0), gameState(PLAYING) {
 	for (int i = 0; i < 1024; i++) {
 		keys[i] = false;
 		lockKeys[i] = false;
@@ -17,21 +17,8 @@ void Game::Init() {
 	glm::mat4 projection = glm::ortho(0.0f, SCREEN_WIDTH, 0.0f, SCREEN_HEIGHT, -1.0f, 1.0f);
 	Ressource::GetShader("sprite_shader").setMat4("projection", projection);
 	InitMap();
-	nextPieceVisual.size = glm::vec2(100.0f);
-	nextPieceVisual.position = glm::vec2(SCREEN_WIDTH * 0.75f, SCREEN_HEIGHT * 0.5 - nextPieceVisual.size.x);
-	nextPieceText.chaine = "Next";
-	nextPieceText.position = glm::vec2(nextPieceVisual.position.x, nextPieceVisual.position.y + nextPieceVisual.size.y + 50.0f);
-	nextPieceText.scale = 1.0f;
-	nextPieceText.color = glm::vec4(1.0f);
-	scoreText.chaine = std::string("Score : ").append(std::to_string(score));
-	scoreText.position = glm::vec2(10.0f, SCREEN_HEIGHT * 0.8f);
-	scoreText.scale = 1.0f;
-	scoreText.color = glm::vec4(1.0f);
-	gameOverText.chaine = "GAME OVER";
-	gameOverText.position = glm::vec2(SCREEN_WIDTH * 0.5f - textRenderer->getSize("GAME OVER").x * 0.5, SCREEN_HEIGHT * 0.5f);
-	gameOverText.scale = 1.0f;
-	gameOverText.color = glm::vec4(1.0f);
-	playerPiece.Spawn(blocks, nombreBlockBordure, board, nextShape);
+	InitUI();
+	playerPiece.Spawn(blocks.get(), nombreBlockBordure, board, nextShape);
 	nextShape = (SHAPE)(rand() % 7);
 	SetNewPieceVisual();
 }
@@ -82,6 +69,26 @@ void Game::InitRessource() {
 	Ressource::LoadTexture(std::filesystem::path{ "../texture/forme_Z_gauche.png" }.string().c_str(), false, "forme_Z_gauche");
 
 }
+void Game::InitUI() {
+	nextPieceVisual.size = glm::vec2(100.0f);
+	nextPieceVisual.position = glm::vec2(SCREEN_WIDTH * 0.75f, SCREEN_HEIGHT * 0.5 - nextPieceVisual.size.x);
+	nextPieceText.chaine = "Next";
+	nextPieceText.position = glm::vec2(nextPieceVisual.position.x, nextPieceVisual.position.y + nextPieceVisual.size.y + 50.0f);
+	nextPieceText.scale = 1.0f;
+	nextPieceText.color = glm::vec4(1.0f);
+	scoreText.chaine = std::string("Score : ").append(std::to_string(score));
+	scoreText.position = glm::vec2(10.0f, SCREEN_HEIGHT * 0.8f);
+	scoreText.scale = 1.0f;
+	scoreText.color = glm::vec4(1.0f);
+	gameOverText.chaine = "GAME OVER";
+	gameOverText.position = glm::vec2(SCREEN_WIDTH * 0.5f - textRenderer->getSize("GAME OVER").x * 0.5, SCREEN_HEIGHT * 0.5f);
+	gameOverText.scale = 1.0f;
+	gameOverText.color = glm::vec4(1.0f);
+	levelText.chaine = std::string("Niveau : ").append(std::to_string(level));
+	levelText.position = glm::vec2(10.0f, SCREEN_HEIGHT * 0.6f);
+	levelText.scale = 1.0f;
+	levelText.color = glm::vec4(1.0f);
+}
 void Game::Update(float deltaTime) {
 	switch (gameState) {
 	case PLAYING:
@@ -90,7 +97,7 @@ void Game::Update(float deltaTime) {
 			if (playerPiece.Down(board))
 				NewPiece();
 
-			timer = maxTimer;
+			timer = maxTimer - ((level - 1) * levelTimerReduction);
 		}
 		break;
 	}
@@ -104,10 +111,11 @@ void Game::Render() {
 	nextPieceVisual.Draw(*spriteRenderer);
 	nextPieceText.Draw(*textRenderer);
 	scoreText.Draw(*textRenderer);
+	levelText.Draw(*textRenderer);
 	if(gameState == GAMEOVER)
 		gameOverText.Draw(*textRenderer);
 }
-void Game::CheckRows() {
+int Game::CheckRows() {
 	bool clear;
 	int rowCleared = 0;
 	for (int i = 1; i < tileHeight - 4; i++) {
@@ -127,8 +135,7 @@ void Game::CheckRows() {
 		}
 			
 	}
-	if (rowCleared != 0)
-		UpdateScore(rowCleared);
+	return rowCleared;
 }
 void Game::ClearRow(int row) {
 	for (int i = 1; i < tileWidth - 1; i++) {
@@ -150,19 +157,27 @@ void Game::ClearRow(int row) {
 void Game::UpdateScore(int rowNumber) {
 	switch (rowNumber) {
 	case 1:
-		score += (baseRowPoint * niveau);
+		score += (baseRowPoint * level);
 		break;
 	case 2:
-		score += (baseRowPoint * niveau * 2) * 2;
+		score += (baseRowPoint * level * 2) * 2;
 		break;
 	case 3:
-		score += (baseRowPoint * niveau * 3) * 3;
+		score += (baseRowPoint * level * 3) * 3;
 		break;
 	case 4:
-		score += (baseRowPoint * niveau * 4) * 5;
+		score += (baseRowPoint * level * 4) * 5;
 		break;
 	}
 	scoreText.chaine = std::string("Score : ").append(std::to_string(score));
+}
+void Game::UpdateLevel() {
+	if (score >= levelUpTreshold) {
+		level++;
+		levelUpTreshold *= 2;
+		levelText.chaine = std::string("Niveau : ").append(std::to_string(level));
+	}
+	
 }
 void Game::CheckGameOver() {
 	for (int i = 1; i < tileWidth - 1; i++) {
@@ -184,10 +199,12 @@ void Game::Restart() {
 		blocks[i].used = false;
 
 	score = 0;
+	level = 1;
+	levelUpTreshold = baseLevelUpTreshold;
 	scoreText.chaine = std::string("Score : ").append(std::to_string(score));
 	gameState = PLAYING;
 	nextShape = (SHAPE)(rand() % 7);
-	playerPiece.Spawn(blocks, nombreBlockBordure, board, nextShape);
+	playerPiece.Spawn(blocks.get(), nombreBlockBordure, board, nextShape);
 	nextShape = (SHAPE)(rand() % 7);
 	SetNewPieceVisual();
 }
@@ -277,9 +294,10 @@ void Game::SetNewPieceVisual() {
 
 void Game::NewPiece(){
 	CheckIntegrity(board);
-	CheckRows();
+	UpdateScore(CheckRows());
+	UpdateLevel();
 	CheckGameOver();
-	playerPiece.Spawn(blocks, nombreBlockBordure, board,nextShape);
+	playerPiece.Spawn(blocks.get(), nombreBlockBordure, board,nextShape);
 	nextShape = nextShape = (SHAPE)(rand() % 7);
 	SetNewPieceVisual();
 }

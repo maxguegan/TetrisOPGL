@@ -33,19 +33,20 @@ public:
 private:
 
 
-	int score, niveau, nombreBlockBordure;
+	int score, level, nombreBlockBordure;
+	int levelUpTreshold = baseLevelUpTreshold;
 	float timer = maxTimer;
     float inputTimer = maxInputTimer;
 
 
 	PlayerPiece playerPiece;
-	Block * blocks = new Block[tileWidth * tileHeight];
+	std::unique_ptr<Block[]> blocks = std::make_unique<Block[]>(tileHeight * tileWidth);
 	Tile board[tileWidth][tileHeight];
 	GAMESTATE gameState;
 	SHAPE nextShape;
 
 	GameObject nextPieceVisual;
-	UIText nextPieceText, scoreText, gameOverText;
+	UIText nextPieceText, scoreText, gameOverText, levelText;
 
 	std::unique_ptr<SpriteRenderer> spriteRenderer;
 	std::unique_ptr<TextRenderer> textRenderer;
@@ -53,12 +54,14 @@ private:
 private:
 	void InitMap();
 	void InitRessource();
-	void CheckRows();
+	void InitUI();
+	int CheckRows();
 	void ClearRow(int row);
 	void CheckGameOver();
 	void NewPiece();
 	void SetNewPieceVisual();
 	void UpdateScore(int rowNumber);
+	void UpdateLevel();
 	void Restart();
 
 };
