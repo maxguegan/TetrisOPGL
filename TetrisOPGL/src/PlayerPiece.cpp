@@ -175,6 +175,8 @@ void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextSha
 			board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
 			board[curPosition.x + 1][curPosition.y + 1].state == FULL || board[curPosition.x + 1][curPosition.y + 1].state == LIMITE)
 			return;
+		for (int i = 1; i < PIECE_SIZE; i++)
+			board[curBlocks[i]->GetPos().x][curBlocks[i]->GetPos().y].block = nullptr;
 		curBlocks[0]->Init(Ressource::GetTexture("block_carre"), tileSize, board[curPosition.x][curPosition.y]);
 		curBlocks[1]->Init(Ressource::GetTexture("block_carre"), tileSize, board[curPosition.x + 1][curPosition.y]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_carre"), tileSize, board[curPosition.x][curPosition.y + 1]);
@@ -186,6 +188,8 @@ void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextSha
 			board[curPosition.x][curPosition.y + 2].state == FULL || board[curPosition.x][curPosition.y + 2].state == LIMITE ||
 			board[curPosition.x][curPosition.y + 3].state == FULL || board[curPosition.x][curPosition.y + 3].state == LIMITE)
 			return;
+		for (int i = 1; i < PIECE_SIZE; i++)
+			board[curBlocks[i]->GetPos().x][curBlocks[i]->GetPos().y].block = nullptr;
 		curBlocks[0]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[curPosition.x][curPosition.y + 1]);
 		curBlocks[1]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[curPosition.x][curPosition.y]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[curPosition.x][curPosition.y + 2]);
@@ -197,6 +201,8 @@ void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextSha
 			board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
 			board[curPosition.x - 1][curPosition.y].state == FULL || board[curPosition.x - 1][curPosition.y].state == LIMITE)
 			return;
+		for (int i = 1; i < PIECE_SIZE; i++)
+			board[curBlocks[i]->GetPos().x][curBlocks[i]->GetPos().y].block = nullptr;
 		curBlocks[0]->Init(Ressource::GetTexture("block_T"), tileSize, board[curPosition.x][curPosition.y]);
 		curBlocks[1]->Init(Ressource::GetTexture("block_T"), tileSize, board[curPosition.x + 1][curPosition.y]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_T"), tileSize, board[curPosition.x][curPosition.y + 1]);
@@ -208,6 +214,8 @@ void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextSha
 			board[curPosition.x + 1][curPosition.y].state == FULL || board[curPosition.x + 1][curPosition.y].state == LIMITE ||
 			board[curPosition.x][curPosition.y + 2].state == FULL || board[curPosition.x][curPosition.y + 2].state == LIMITE)
 			return;
+		for (int i = 1; i < PIECE_SIZE; i++)
+			board[curBlocks[i]->GetPos().x][curBlocks[i]->GetPos().y].block = nullptr;
 		curBlocks[0]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[curPosition.x][curPosition.y + 1]);
 		curBlocks[1]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[curPosition.x][curPosition.y]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[curPosition.x + 1][curPosition.y]);
@@ -219,6 +227,8 @@ void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextSha
 			board[curPosition.x - 1][curPosition.y].state == FULL || board[curPosition.x - 1][curPosition.y].state == LIMITE ||
 			board[curPosition.x][curPosition.y + 2].state == FULL || board[curPosition.x][curPosition.y + 2].state == LIMITE)
 			return;
+		for (int i = 1; i < PIECE_SIZE; i++)
+			board[curBlocks[i]->GetPos().x][curBlocks[i]->GetPos().y].block = nullptr;
 		curBlocks[0]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[curPosition.x][curPosition.y + 1]);
 		curBlocks[1]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[curPosition.x][curPosition.y]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[curPosition.x - 1][curPosition.y]);
@@ -230,6 +240,8 @@ void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextSha
 			board[curPosition.x + 1][curPosition.y + 1].state == FULL || board[curPosition.x + 1][curPosition.y + 1].state == LIMITE ||
 			board[curPosition.x - 1][curPosition.y].state == FULL || board[curPosition.x - 1][curPosition.y].state == LIMITE)
 			return;
+		for (int i = 1; i < PIECE_SIZE; i++)
+			board[curBlocks[i]->GetPos().x][curBlocks[i]->GetPos().y].block = nullptr;
 		curBlocks[0]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[curPosition.x][curPosition.y]);
 		curBlocks[1]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[curPosition.x][curPosition.y + 1]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[curPosition.x + 1][curPosition.y + 1]);
@@ -241,6 +253,8 @@ void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextSha
 			board[curPosition.x - 1][curPosition.y + 1].state == FULL || board[curPosition.x - 1][curPosition.y + 1].state == LIMITE ||
 			board[curPosition.x + 1][curPosition.y].state == FULL || board[curPosition.x + 1][curPosition.y].state == LIMITE)
 			return;
+		for (int i = 1; i < PIECE_SIZE; i++)
+			board[curBlocks[i]->GetPos().x][curBlocks[i]->GetPos().y].block = nullptr;
 		curBlocks[0]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[curPosition.x][curPosition.y]);
 		curBlocks[1]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[curPosition.x][curPosition.y + 1]);
 		curBlocks[2]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[curPosition.x - 1][curPosition.y + 1]);
