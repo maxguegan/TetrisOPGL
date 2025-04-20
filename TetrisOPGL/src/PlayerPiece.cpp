@@ -68,6 +68,7 @@ void PlayerPiece::Spawn(Block* blocks, int nombreBlockLimite,Tile(&board)[tileWi
 		std::cout << "Erreur au niveau du choix de forme" << std::endl;
 		break;
 	}
+	this->shape = shape;
 }
 
 //Renvoie vrai si on tente de descendre alors que l'un des blocks est en contact avec un block déjà placé et faux sinon
@@ -160,4 +161,96 @@ void PlayerPiece::RotateLeft(Tile(&board)[tileWidth][tileHeight]) {
 		int rotateX = -(blockPos.y - pivotPos.y);
 		curBlocks[i]->SetPos(board[pivotPos.x + rotateX][pivotPos.y + rotateY]);
 	}
+}
+void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextShape) {
+	glm::ivec2 curPosition = curBlocks[0]->GetPos();
+	std::cout << curPosition.x << " " << curPosition.y << std::endl;
+	switch (nextShape)//l'élément 0 est le pivot pour la rotation 
+	{
+	case SHAPE_SQUARE:
+
+		//block de vérification pour les positions de permutations 
+		if (board[curPosition.x][curPosition.y].state == FULL || board[curPosition.x][curPosition.y].state == LIMITE ||
+			board[curPosition.x + 1][curPosition.y].state == FULL || board[curPosition.x + 1][curPosition.y].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x + 1][curPosition.y + 1].state == FULL || board[curPosition.x + 1][curPosition.y + 1].state == LIMITE)
+			return;
+		curBlocks[0]->Init(Ressource::GetTexture("block_carre"), tileSize, board[curPosition.x][curPosition.y]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_carre"), tileSize, board[curPosition.x + 1][curPosition.y]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_carre"), tileSize, board[curPosition.x][curPosition.y + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_carre"), tileSize, board[curPosition.x + 1][curPosition.y + 1]);
+		break;
+	case SHAPE_LINE:
+		if (board[curPosition.x][curPosition.y].state == FULL || board[curPosition.x][curPosition.y].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 2].state == FULL || board[curPosition.x][curPosition.y + 2].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 3].state == FULL || board[curPosition.x][curPosition.y + 3].state == LIMITE)
+			return;
+		curBlocks[0]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[curPosition.x][curPosition.y + 1]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[curPosition.x][curPosition.y]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[curPosition.x][curPosition.y + 2]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_ligne"), tileSize, board[curPosition.x][curPosition.y + 3]);
+		break;
+	case SHAPE_T:
+		if (board[curPosition.x][curPosition.y].state == FULL || board[curPosition.x][curPosition.y].state == LIMITE ||
+			board[curPosition.x + 1][curPosition.y].state == FULL || board[curPosition.x + 1][curPosition.y].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x - 1][curPosition.y].state == FULL || board[curPosition.x - 1][curPosition.y].state == LIMITE)
+			return;
+		curBlocks[0]->Init(Ressource::GetTexture("block_T"), tileSize, board[curPosition.x][curPosition.y]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_T"), tileSize, board[curPosition.x + 1][curPosition.y]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_T"), tileSize, board[curPosition.x][curPosition.y + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_T"), tileSize, board[curPosition.x - 1][curPosition.y]);
+		break;
+	case SHAPE_L_RIGHT:
+		if (board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x][curPosition.y].state == FULL || board[curPosition.x][curPosition.y].state == LIMITE ||
+			board[curPosition.x + 1][curPosition.y].state == FULL || board[curPosition.x + 1][curPosition.y].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 2].state == FULL || board[curPosition.x][curPosition.y + 2].state == LIMITE)
+			return;
+		curBlocks[0]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[curPosition.x][curPosition.y + 1]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[curPosition.x][curPosition.y]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[curPosition.x + 1][curPosition.y]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_L_droite"), tileSize, board[curPosition.x][curPosition.y + 2]);
+		break;
+	case SHAPE_L_LEFT:
+		if (board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x][curPosition.y].state == FULL || board[curPosition.x][curPosition.y].state == LIMITE ||
+			board[curPosition.x - 1][curPosition.y].state == FULL || board[curPosition.x - 1][curPosition.y].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 2].state == FULL || board[curPosition.x][curPosition.y + 2].state == LIMITE)
+			return;
+		curBlocks[0]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[curPosition.x][curPosition.y + 1]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[curPosition.x][curPosition.y]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[curPosition.x - 1][curPosition.y]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_L_gauche"), tileSize, board[curPosition.x][curPosition.y + 2]);
+		break;
+	case SHAPE_Z_RIGHT:
+		if (board[curPosition.x][curPosition.y].state == FULL || board[curPosition.x][curPosition.y].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x + 1][curPosition.y + 1].state == FULL || board[curPosition.x + 1][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x - 1][curPosition.y].state == FULL || board[curPosition.x - 1][curPosition.y].state == LIMITE)
+			return;
+		curBlocks[0]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[curPosition.x][curPosition.y]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[curPosition.x][curPosition.y + 1]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[curPosition.x + 1][curPosition.y + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_Z_droite"), tileSize, board[curPosition.x - 1][curPosition.y]);
+		break;
+	case SHAPE_Z_LEFT:
+		if (board[curPosition.x][curPosition.y].state == FULL || board[curPosition.x][curPosition.y].state == LIMITE ||
+			board[curPosition.x][curPosition.y + 1].state == FULL || board[curPosition.x][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x - 1][curPosition.y + 1].state == FULL || board[curPosition.x - 1][curPosition.y + 1].state == LIMITE ||
+			board[curPosition.x + 1][curPosition.y].state == FULL || board[curPosition.x + 1][curPosition.y].state == LIMITE)
+			return;
+		curBlocks[0]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[curPosition.x][curPosition.y]);
+		curBlocks[1]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[curPosition.x][curPosition.y + 1]);
+		curBlocks[2]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[curPosition.x - 1][curPosition.y + 1]);
+		curBlocks[3]->Init(Ressource::GetTexture("block_Z_gauche"), tileSize, board[curPosition.x + 1][curPosition.y]);
+		break;
+	default:
+		std::cout << "Erreur au niveau du choix de forme" << std::endl;
+		break;
+	}
+	SHAPE temp = shape;
+	shape = nextShape;
+	nextShape = temp;
 }

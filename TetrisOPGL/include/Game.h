@@ -11,6 +11,7 @@
 enum GAMESTATE
 {
 	PLAYING,
+	PAUSE,
 	GAMEOVER,
 	END
 };
@@ -46,7 +47,7 @@ private:
 	SHAPE nextShape;
 
 	GameObject nextPieceVisual;
-	UIText nextPieceText, scoreText, gameOverText, levelText;
+	UIText nextPieceText, scoreText, gameOverText, levelText, pauseText;
 
 	std::unique_ptr<SpriteRenderer> spriteRenderer;
 	std::unique_ptr<TextRenderer> textRenderer;

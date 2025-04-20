@@ -88,6 +88,11 @@ void Game::InitUI() {
 	levelText.position = glm::vec2(10.0f, SCREEN_HEIGHT * 0.6f);
 	levelText.scale = 1.0f;
 	levelText.color = glm::vec4(1.0f);
+	pauseText.chaine = "PAUSE";
+	pauseText.position = glm::vec2(SCREEN_WIDTH * 0.5f - textRenderer->getSize("PAUSE").x * 0.5, SCREEN_HEIGHT * 0.5f);
+	pauseText.scale = 1.0f;
+	pauseText.color = glm::vec4(1.0f);
+
 }
 void Game::Update(float deltaTime) {
 	switch (gameState) {
@@ -114,6 +119,8 @@ void Game::Render() {
 	levelText.Draw(*textRenderer);
 	if(gameState == GAMEOVER)
 		gameOverText.Draw(*textRenderer);
+	if (gameState == PAUSE)
+		pauseText.Draw(*textRenderer);
 }
 int Game::CheckRows() {
 	bool clear;
@@ -248,6 +255,21 @@ void Game::ProcessInput(float deltaTime) {
 		else if (!keys[GLFW_KEY_Q] && lockKeys[GLFW_KEY_Q]) {
 			lockKeys[GLFW_KEY_Q] = false;
 		}
+		if (keys[GLFW_KEY_P] && !lockKeys[GLFW_KEY_P]) {
+			gameState = PAUSE;
+			lockKeys[GLFW_KEY_P] = true;
+		}
+		else if (!keys[GLFW_KEY_P] && lockKeys[GLFW_KEY_P]) {
+			lockKeys[GLFW_KEY_P] = false;
+		}
+		if (keys[GLFW_KEY_SPACE] && !lockKeys[GLFW_KEY_SPACE]) {
+			playerPiece.SwapPiece(board, nextShape);
+			SetNewPieceVisual();
+			lockKeys[GLFW_KEY_SPACE] = true;
+		}
+		else if (!keys[GLFW_KEY_SPACE] && lockKeys[GLFW_KEY_SPACE]) {
+			lockKeys[GLFW_KEY_SPACE] = false;
+		}
 	}
 	else if (gameState == GAMEOVER) {
 		if (keys[GLFW_KEY_R] && !lockKeys[GLFW_KEY_R]) {
@@ -258,7 +280,15 @@ void Game::ProcessInput(float deltaTime) {
 			lockKeys[GLFW_KEY_Q] = false;
 		}
 	}
-
+	else if (gameState == PAUSE) {
+		if (keys[GLFW_KEY_P] && !lockKeys[GLFW_KEY_P]) {
+			gameState = PLAYING;
+			lockKeys[GLFW_KEY_P] = true;
+		}
+		else if (!keys[GLFW_KEY_P] && lockKeys[GLFW_KEY_P]) {
+			lockKeys[GLFW_KEY_P] = false;
+		}
+	}
 }
 
 

@@ -11,6 +11,7 @@ class PlayerPiece {
 
 public:
 	Block* curBlocks[PIECE_SIZE];
+	SHAPE shape = SHAPE_LINE;
 public:
 	PlayerPiece();
 	void Spawn(Block* blocks, int nombreBlockLimite, Tile(&board)[tileWidth][tileHeight], SHAPE shape);
@@ -19,6 +20,7 @@ public:
 	void MoveLeft(Tile(&board)[tileWidth][tileHeight]);
 	void RotateRight(Tile(&board)[tileWidth][tileHeight]);
 	void RotateLeft(Tile(&board)[tileWidth][tileHeight]);
+	void SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextShape);
 	void AffixPiece(Tile(&board)[tileWidth][tileHeight]);//Fin de traitement d'une pièce qui est bloqué 
 
 };
