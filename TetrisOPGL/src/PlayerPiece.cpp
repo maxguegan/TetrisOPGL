@@ -132,7 +132,7 @@ void PlayerPiece::RotateRight(Tile(&board)[tileWidth][tileHeight]) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
 		int rotateY = -(blockPos.x - pivotPos.x);
 		int rotateX = blockPos.y - pivotPos.y;
-		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL || board[blockPos.x + rotateX][blockPos.y + rotateY].state == LIMITE)
+		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL || board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == LIMITE)
 			return;
 	}
 	for (int i = 1; i < PIECE_SIZE; i++) {
@@ -149,14 +149,15 @@ void PlayerPiece::RotateLeft(Tile(&board)[tileWidth][tileHeight]) {
 	glm::ivec2 pivotPos = curBlocks[0]->GetPos();
 	for (int i = 1; i < PIECE_SIZE; i++) {
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
-		board[blockPos.x][blockPos.y].block = NULL;
 		int rotateY = blockPos.x - pivotPos.x;
 		int rotateX = -(blockPos.y - pivotPos.y);
-		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL || board[blockPos.x + rotateX][blockPos.y + rotateY].state == LIMITE)
+		if (board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == FULL || board[pivotPos.x + rotateX][pivotPos.y + rotateY].state == LIMITE)
 			return;
 	}
 	for (int i = 1; i < PIECE_SIZE; i++) {
+
 		glm::ivec2 blockPos = curBlocks[i]->GetPos();
+		board[blockPos.x][blockPos.y].block = NULL;
 		int rotateY = blockPos.x - pivotPos.x;
 		int rotateX = -(blockPos.y - pivotPos.y);
 		curBlocks[i]->SetPos(board[pivotPos.x + rotateX][pivotPos.y + rotateY]);
@@ -164,7 +165,6 @@ void PlayerPiece::RotateLeft(Tile(&board)[tileWidth][tileHeight]) {
 }
 void PlayerPiece::SwapPiece(Tile(&board)[tileWidth][tileHeight], SHAPE & nextShape) {
 	glm::ivec2 curPosition = curBlocks[0]->GetPos();
-	std::cout << curPosition.x << " " << curPosition.y << std::endl;
 	switch (nextShape)//l'élément 0 est le pivot pour la rotation 
 	{
 	case SHAPE_SQUARE:

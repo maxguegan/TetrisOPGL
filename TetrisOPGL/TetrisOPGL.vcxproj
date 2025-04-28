@@ -137,6 +137,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="include\Block.h" />
+    <ClInclude Include="include\Button.h" />
     <ClInclude Include="include\dlg\dlg.h" />
     <ClInclude Include="include\dlg\output.h" />
     <ClInclude Include="include\freetype\config\ftconfig.h" />

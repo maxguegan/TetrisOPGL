@@ -1236,6 +1236,9 @@
     <ClInclude Include="include\UIText.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\Button.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="include\glm\detail\func_common.inl">

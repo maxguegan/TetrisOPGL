@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 #include "Game.h"
-
+#include <functional>
 void ProcessInput(GLFWwindow* window, Game& game);
 GLFWwindow* SetupGLFW();
 const float SCREEN_WIDTH = 800;
@@ -13,9 +13,8 @@ float lastFrame = 0.0f;
 float curFrame = 0.0f;
 float deltaTime = 0.0f;
 
-
 int main() {
-   
+  
     //création de la fenètre
     GLFWwindow* window = SetupGLFW();
         if (window == NULL)
